@@ -25,7 +25,6 @@ if error:
     print('Errors detected, please resolve before continuing')
     sys.exit()
 
-print(allFiles)
 
 for file in allFiles: 
     print(file)
@@ -34,8 +33,12 @@ for file in allFiles:
     imgInputFile = BytesIO()
     picture.save(imgInputFile, 'png')
     imgInputFileSize = imgInputFile.tell()
-    print(imgInputFileSize)
+    print("old: {}".format(imgInputFileSize))
     picture.save(file, optimize=True)
-    print("new: {}".format(os.path.getsize(filepath)))
+    newFileSize = os.path.getsize(filepath)
+    print("new: {}".format(newFileSize))
+    if imgInputFileSize < newFileSize: # for some reason new size is larger?
+        picture.save(file)
+        print("!!! compressed file of {} was larger".format(filepath))
 
 
