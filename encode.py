@@ -34,11 +34,19 @@ for file in allFiles:
     picture.save(imgInputFile, 'png')
     imgInputFileSize = imgInputFile.tell()
     print("old: {}".format(imgInputFileSize))
+    #print(int.from_bytes(imgInputFile, "big"))
     picture.save(file, optimize=True)
     newFileSize = os.path.getsize(filepath)
     print("new: {}".format(newFileSize))
+    
+    compare = imgInputFileSize - newFileSize
+    print("diff: {}".format(compare))
+    
     if imgInputFileSize < newFileSize: # for some reason new size is larger?
         picture.save(file)
         print("!!! compressed file of {} was larger".format(filepath))
+    elif compare <= 1024:
+        picture.save(file)
+        print("--- changes less than 1024b, diff: {}".format(compare))
 
 
